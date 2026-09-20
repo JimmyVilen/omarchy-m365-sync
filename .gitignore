@@ -1,0 +1,4 @@
+# rclone's config holds OAuth tokens for every remote — never commit it.
+rclone.conf
+*.env
+!*.env.example

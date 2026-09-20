@@ -1,0 +1,29 @@
+[Unit]
+Description=rclone mount %i -> ~/Preventia/%i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+Environment=RCLONE_EXTRA=
+EnvironmentFile=-%h/.config/rclone/mount-%i.env
+ExecStartPre=/usr/bin/mkdir -p %h/Preventia/%i
+ExecStartPre=/usr/bin/rm -f %t/rclone-%i.sock
+ExecStart=/usr/bin/rclone mount %i: %h/Preventia/%i \
+    --vfs-cache-mode full \
+    --vfs-cache-max-size 50G \
+    --vfs-cache-max-age 720h \
+    --vfs-read-chunk-size 16M \
+    --dir-cache-time 5m \
+    --poll-interval 1m \
+    --cache-dir %h/.cache/rclone \
+    --log-level INFO \
+    --log-file %h/.cache/rclone/%i.log \
+    --rc --rc-addr unix://%t/rclone-%i.sock \
+    $RCLONE_EXTRA
+ExecStop=/usr/bin/fusermount3 -uz %h/Preventia/%i
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=default.target
