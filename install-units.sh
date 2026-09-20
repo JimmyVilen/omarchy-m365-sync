@@ -42,3 +42,10 @@ done
 echo
 echo "Status:"
 systemctl --user list-units 'rclone-mount@*' --all --no-pager
+
+# Launched from the widget the script owns the terminal window, so hold it open
+# long enough to read what happened.
+if [[ -t 0 ]]; then
+  echo
+  read -rp "Tryck Enter för att stänga… " _
+fi

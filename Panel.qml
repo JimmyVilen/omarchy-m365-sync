@@ -24,6 +24,10 @@ Panel {
   readonly property bool problem: rclone.overall === "auth" || rclone.overall === "error"
   readonly property int rowCount: rclone.mounts.length + 1
   readonly property bool loginSelected: cursorIndex === rclone.mounts.length
+  // With no mounts there is nothing to re-authenticate, so the last row offers
+  // first-run setup instead. Row count and cursor maths are unchanged: it is
+  // the same row wearing a different label.
+  readonly property bool needsSetup: rclone.mounts.length === 0
 
   function selectedMount() {
     return cursorIndex < rclone.mounts.length ? rclone.mounts[cursorIndex] : null
@@ -35,7 +39,7 @@ Panel {
   }
 
   function activateCursor() {
-    if (loginSelected) rclone.reauth()
+    if (loginSelected) root.needsSetup ? rclone.setupUnits() : rclone.reauth()
     else rclone.openFolder(selectedMount())
   }
 
@@ -104,7 +108,7 @@ Panel {
         if (key === "r") rclone.restart(mount)
         else if (key === "l") rclone.showLog(mount)
         else if (key === "o") rclone.openFolder(mount)
-        else if (key === "i") rclone.reauth()
+        else if (key === "i") root.needsSetup ? rclone.setupUnits() : rclone.reauth()
       }
 
       Flickable {
@@ -208,7 +212,9 @@ Panel {
 
           PanelSeparator { foreground: root.foreground }
 
-          LoginRow { width: parent.width }
+          LoginRow { width: parent.width; visible: !root.needsSetup }
+
+          SetupRow { width: parent.width; visible: root.needsSetup }
         }
       }
     }
@@ -382,6 +388,63 @@ Panel {
           textFormat: Text.PlainText
           Layout.fillWidth: true
           text: "Ny M365-inloggning för alla monteringar"
+          color: root.dim
+          font.family: root.fontFamily
+          font.pixelSize: Style.font.caption
+          elide: Text.ElideRight
+        }
+      }
+    }
+  }
+
+  component SetupRow: CursorSurface {
+    id: setupRow
+    hasCursor: root.cursorActive && root.loginSelected
+    foreground: root.foreground
+    implicitHeight: setupContent.implicitHeight + Style.spacing.rowPaddingX
+
+    MouseArea {
+      anchors.fill: parent
+      hoverEnabled: true
+      cursorShape: Qt.PointingHandCursor
+      onEntered: { root.cursorActive = true; root.cursorIndex = rclone.mounts.length }
+      onClicked: rclone.setupUnits()
+    }
+
+    RowLayout {
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.leftMargin: Style.space(10)
+      anchors.rightMargin: Style.space(10)
+      spacing: Style.space(8)
+
+      Text {
+        textFormat: Text.PlainText
+        text: Model.GLYPH_SETUP
+        color: root.foreground
+        font.family: root.fontFamily
+        font.pixelSize: Style.font.icon
+      }
+
+      ColumnLayout {
+        id: setupContent
+        Layout.fillWidth: true
+        spacing: Style.space(1)
+
+        Text {
+          textFormat: Text.PlainText
+          Layout.fillWidth: true
+          text: "Sätt upp monteringar (i)"
+          color: root.foreground
+          font.family: root.fontFamily
+          font.pixelSize: Style.font.body
+        }
+
+        Text {
+          textFormat: Text.PlainText
+          Layout.fillWidth: true
+          text: "Installerar tjänsten och aktiverar dina rclone-remotes"
           color: root.dim
           font.family: root.fontFamily
           font.pixelSize: Style.font.caption

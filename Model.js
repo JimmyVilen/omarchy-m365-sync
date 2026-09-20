@@ -8,6 +8,7 @@ var GLYPH_FOLDER = String.fromCodePoint(0xF0770)    // folder-open
 var GLYPH_RESTART = String.fromCodePoint(0xF0709)   // restart
 var GLYPH_LOG = String.fromCodePoint(0xF0219)       // file-document
 var GLYPH_LOGIN = String.fromCodePoint(0xF0342)     // login
+var GLYPH_SETUP = String.fromCodePoint(0xF0493)     // cog
 var GLYPH_UP = String.fromCodePoint(0xF005D)        // arrow-up
 var GLYPH_DOWN = String.fromCodePoint(0xF0045)      // arrow-down
 

@@ -87,6 +87,16 @@ Item {
     settleTimer.restart()
   }
 
+  // First-run setup: installs the rclone-mount@ unit and enables one instance
+  // per configured remote. Runs in a terminal rather than detached in the
+  // background, because it asks before enabling each mount.
+  function setupUnits() {
+    Quickshell.execDetached(["uwsm-app", "--", "xdg-terminal-exec", pluginDir + "/install-units.sh"])
+    flash("Uppsättning startad i terminalen")
+    settleTimer.ticks = 0
+    settleTimer.restart()
+  }
+
   Timer {
     interval: root.refreshIntervalSec * 1000
     repeat: true
