@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "jimmy.rclone",
+  "name": "rclone mounts",
+  "version": "1.0.0",
+  "author": "jimmy",
+  "license": "MIT",
+  "description": "Status for rclone-mount@ user units (M365 OneDrive / Teams): mounted, uploads pending, login problems.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "rclone",
+    "description": "OneDrive/Teams mounts via rclone: status, pending uploads, restart, log and re-login.",
+    "category": "Files",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "refreshIntervalSec": 20
+    },
+    "schema": [
+      {
+        "key": "refreshIntervalSec",
+        "type": "integer",
+        "label": "Refresh interval (seconds)",
+        "min": 5,
+        "max": 600,
+        "step": 5,
+        "defaultValue": 20
+      }
+    ]
+  }
+}
