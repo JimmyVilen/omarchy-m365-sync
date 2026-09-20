@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "jimmy.rclone",
-  "name": "rclone mounts",
+  "id": "io.github.jimmyvilen.cloud-mounts",
+  "name": "Cloud mounts",
   "version": "1.0.0",
   "author": "jimmy",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "barWidget": "Panel.qml"
   },
   "barWidget": {
-    "displayName": "rclone",
+    "displayName": "mounts",
     "description": "OneDrive/Teams mounts via rclone: status, pending uploads, restart, log and re-login.",
     "category": "Files",
     "allowMultiple": false,

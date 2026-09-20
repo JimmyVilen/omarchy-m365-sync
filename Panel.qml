@@ -9,8 +9,8 @@ import "Model.js" as Model
 
 Panel {
   id: root
-  moduleName: "jimmy.rclone"
-  ipcTarget: "jimmy.rclone"
+  moduleName: "io.github.jimmyvilen.cloud-mounts"
+  ipcTarget: "io.github.jimmyvilen.cloud-mounts"
   manageIpc: false
 
   // Cursor rows: one per mount, then the re-login row.
